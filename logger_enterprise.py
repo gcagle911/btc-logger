@@ -63,8 +63,11 @@ app = Flask(__name__)
 def serve_enterprise_csv():
     return send_file(CSV_FILE)
 
+import os
+
 def start_server():
-    app.run(host='0.0.0.0', port=10001)
+    port = int(os.environ.get("PORT", 10000))  # this line reads the correct port from Render
+    app.run(host='0.0.0.0', port=port)
 
 if __name__ == "__main__":
     threading.Thread(target=start_server, daemon=True).start()
