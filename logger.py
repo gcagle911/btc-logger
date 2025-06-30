@@ -1,3 +1,4 @@
+from flask_cors import CORS
 import requests
 import csv
 import time
@@ -48,6 +49,7 @@ def log_data():
 
 # --- Flask server setup ---
 app = Flask(__name__)
+CORS(app)  # ✅ this line allows Vercel to read your CSV
 
 @app.route('/')
 def home():
