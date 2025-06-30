@@ -1,4 +1,4 @@
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import requests
 import csv
 import time
@@ -56,8 +56,9 @@ def home():
     return '<h1>BTC Logger</h1><a href="/data.csv">Download CSV</a>'
 
 @app.route('/data.csv')
+@cross_origin()  # ✅ this forces CORS to work
 def serve_csv():
-    return send_file(CSV_FILE)
+    return send_file(CSV_FILE, mimetype='text/csv')
 
 def start_server():
     app.run(host='0.0.0.0', port=10000)
