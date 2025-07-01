@@ -17,26 +17,21 @@ except FileExistsError:
     pass
 
 def fetch_coinbase_data():
-    ticker_url = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC'
     book_url = 'https://api.exchange.coinbase.com/products/BTC-USD/book?level=1'
-
-    ticker = requests.get(ticker_url).json()
     book = requests.get(book_url).json()
-
-    price = float(ticker['data']['rates']['USD'])
 
     if 'bids' in book and 'asks' in book and book['bids'] and book['asks']:
         bid = float(book['bids'][0][0])
         ask = float(book['asks'][0][0])
     else:
-        bid = price * 0.999
-        ask = price * 1.001
+        return None  # or handle as needed
 
-    spread = ask - bid
+    mid_price = round((bid + ask) / 2, 2)
+    spread = round(ask - bid, 8)
     volume = 0.0
     timestamp = datetime.utcnow().isoformat()
 
-    return [timestamp, price, bid, ask, spread, volume]
+    return [timestamp, mid_price, bid, ask, spread, volume]
 
 def log_data():
     try:
